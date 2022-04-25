@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Илья Ли](https://up.htmlacademy.ru/ecmascript/17/user/1606793).
-* Наставник: `Неизвестно`.
+* Наставник: [Александр Пинаев](https://htmlacademy.ru/profile/id1075973).
 
 ---
 
