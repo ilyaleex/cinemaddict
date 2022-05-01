@@ -4,15 +4,19 @@ import NavigationView from './view/navigation-view.js';
 import MovieAmountView from './view/movie-amount-view.js';
 import SortingView from './view/sorting-view.js';
 import FilmsContainerPresenter from './presenter/films-container-presenter.js';
+import PopupFilmDetailsView from './view/popup-film-details-view.js';
 
-const header = document.querySelector('.header');
-const main = document.querySelector('.main');
-const footerStatistics = document.querySelector('.footer__statistics');
+
+const body = document.querySelector('body');
+const header = body.querySelector('.header');
+const main = body.querySelector('.main');
+const footerStatistics = body.querySelector('.footer__statistics');
 const filmsContainerPresenter = new FilmsContainerPresenter();
 
 render(new ProfileRatingView(), header);
 render(new NavigationView(), main);
 render(new SortingView(), main);
 render(new MovieAmountView(), footerStatistics);
+render(new PopupFilmDetailsView(), body);
 
 filmsContainerPresenter.init(main);
