@@ -14,8 +14,10 @@ export default class FilmsContainerPresenter {
   filmsListTopRatedComponent = new FilmsListTopRatedView();
   filmsListMostCommentedComponent = new FilmsListMostCommentedView();
 
-  init = (filmsContainer) => {
+  init = (filmsContainer, filmsModel) => {
     this.filmsContainer = filmsContainer;
+    this.filmsModel = filmsModel;
+    this.filmsList = [...this.filmsModel.getFilmCards()];
 
     render(this.filmsContainerComponent, this.filmsContainer);
     render(this.filmsListComponent, this.filmsContainerComponent.getElement());
@@ -24,8 +26,8 @@ export default class FilmsContainerPresenter {
     render(this.filmsListTopRatedComponent, this.filmsContainerComponent.getElement());
     render(this.filmsListMostCommentedComponent, this.filmsContainerComponent.getElement());
 
-    for (let i = 0; i < 5; i++) {
-      render(new FilmCardView(), this.filmsListContainerComponent.getElement());
+    for (let i = 0; i < this.filmsList.length; i++) {
+      render(new FilmCardView(this.filmsList[i]), this.filmsListContainerComponent.getElement());
     }
   };
 }
