@@ -17,13 +17,11 @@ export default class FilmsContainerPresenter {
   filmsListTopRatedComponent = new FilmsListTopRatedView();
   filmsListMostCommentedComponent = new FilmsListMostCommentedView();
 
-  init = (filmsContainer, filmsModel, filmCardPopupModel) => {
+  init = (filmsContainer, filmsModel) => {
     this.filmsContainer = filmsContainer;
     this.filmsModel = filmsModel;
     this.filmsList = [...this.filmsModel.getFilmCards()];
-
-    this.filmCardPopupModel = filmCardPopupModel;
-    this.filmsPopup = [...this.filmCardPopupModel.getFilmPopupCard()];
+    this.comments = [...this.filmsModel.getComments()];
 
     render(this.filmsContainerComponent, this.filmsContainer);
     render(this.filmsListComponent, this.filmsContainerComponent.getElement());
@@ -36,6 +34,6 @@ export default class FilmsContainerPresenter {
       render(new FilmCardView(this.filmsList[i]), this.filmsListContainerComponent.getElement());
     }
 
-    render(new PopupFilmDetailsView(this.filmsPopup), footer, RenderPosition.AFTEREND);
+    render(new PopupFilmDetailsView(this.filmsList[1], this.comments), footer, RenderPosition.AFTEREND);
   };
 }

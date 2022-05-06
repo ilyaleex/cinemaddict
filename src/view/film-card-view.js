@@ -1,18 +1,26 @@
 import {createElement} from '../render.js';
-import {humanizeReleaseDate, humanizeRuntime, isActive} from '../utils.js';
+import {humanizeRuntime, normalizeFilmDate} from '../utils.js';
 
 const createFilmCardTemplate = (filmCard) => {
   const {
-    title,
-    totalRating,
-    releaseDate,
-    runtime,
-    poster,
-    description,
-    watchList,
-    alreadyWatched,
-    favorite
+    filmInfo: {
+      title,
+      totalRating,
+      poster,
+      runtime,
+      genre,
+      description,
+      release,
+    },
+    // userDetails: {
+    //   watchList,
+    //   alreadyWatched,
+    //   favorite,
+    // },
+    comments
   } = filmCard;
+
+  const date = release.date !== null ? normalizeFilmDate(release.date, 'preview-date') : '';
 
   return (
     `<article class="film-card">
@@ -20,24 +28,18 @@ const createFilmCardTemplate = (filmCard) => {
         <h3 class="film-card__title">${title}</h3>
         <p class="film-card__rating">${totalRating}</p>
         <p class="film-card__info">
-          <span class="film-card__year">${humanizeReleaseDate(releaseDate)}</span>
+          <span class="film-card__year">${date}</span>
           <span class="film-card__duration">${humanizeRuntime(runtime)}</span>
-          <span class="film-card__genre">Western</span>
+          <span class="film-card__genre">${genre.join(', ')}</span>
         </p>
-        <img src="./images/posters/${poster}" alt="" class="film-card__poster">
-          <p class="film-card__description">${description}</p>
-          <span class="film-card__comments">89 comments</span>
+        <img src="${poster}" alt="" class="film-card__poster">
+        <p class="film-card__description">${description}</p>
+        <span class="film-card__comments">${comments.length} comments</span>
       </a>
       <div class="film-card__controls">
-        <button
-          class="film-card__controls-item film-card__controls-item--add-to-watchlist ${isActive(watchList)}"
-          type="button">Add to watchlist
-        </button>
-        <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${isActive(alreadyWatched)}" type="button">Mark as
-          watched
-        </button>
-        <button class="film-card__controls-item film-card__controls-item--favorite ${isActive(favorite)}" type="button">Mark as favorite
-        </button>
+        <button class="film-card__controls-item film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
+        <button class="film-card__controls-item film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
+        <button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>
       </div>
     </article>`
   );

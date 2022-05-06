@@ -1,73 +1,96 @@
-import {getRandomInteger, getRandomPositiveFloat} from '../utils.js';
-import {generateComment} from './comment.js';
+import {getRandomInteger, getRandomFloatInteger} from '../utils.js';
 
-const generateTitle = () => {
-  const titles = [
-    'The Dance of Life',
-    'Sagebrush Trail',
-    'Santa Claus Conquers the Martians',
-    'Popeye the Sailor Meets Sindbad the Sailor',
-    'The Great Flamarion',
-    'Made for Each Other'
-  ];
+const POINTS_SCALE = 10;
 
-  const randomIndex = getRandomInteger(0, titles.length -1);
+const TITLES = [
+  'The Third Man',
+  'Brief Encounter',
+  'Lawrence of Arabia',
+  'Great Expectations',
+  'Kind Hearts and Coronets',
+  'A Matter of Life and Death',
+];
 
-  return titles[randomIndex];
+const DESCRIPTIONS = [
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+  'Cras aliquet varius magna, non porta ligula feugiat eget.',
+  'Fusce tristique felis at fermentum pharetra',
+  'Aliquam id orci ut lectus varius viverra.',
+  'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
+];
+
+const POSTERS = [
+  'made-for-each-other.png',
+  'popeye-meets-sinbad.png',
+  'sagebrush-trail.jpg',
+  'santa-claus-conquers-the-martians.jpg',
+  'the-dance-of-life.jpg',
+  'the-great-flamarion.jpg',
+  'the-man-with-the-golden-arm.jpg',
+];
+
+const GENRES = [
+  'Musical',
+  'Western',
+  'Comedy',
+];
+
+const EMOTIONS = [
+  'smile',
+  'sleeping',
+  'puke',
+  'angry',
+];
+
+const getRandomRating = () => getRandomFloatInteger(0, POINTS_SCALE);
+
+const getRandomElementFromArray = (list) => {
+  const randomId = getRandomInteger(0, list.length - 1);
+
+  return list[randomId];
 };
 
-const generatePoster = () => {
-  const posters = [
-    'made-for-each-other.png',
-    'popeye-meets-sinbad.png',
-    'sagebrush-trail.jpg',
-    'santa-claus-conquers-the-martians.jpg',
-    'the-dance-of-life.jpg',
-    'the-great-flamarion.jpg',
-    'the-man-with-the-golden-arm.jpg'
-  ];
+const getRandomArrayLength = (list) => list.slice(0, getRandomInteger(1, list.length - 1));
 
-  const randomIndex = getRandomInteger(0, posters.length -1);
-
-  return posters[randomIndex];
-};
-
-const generateName = () => {
-  const authors = [
-    'Ilya O\'Reilly',
-    'Ilya NOT\'Really',
-    'Tim Macoveev',
-    'John Doe',
-  ];
-
-  const randomIndex = getRandomInteger(0, authors.length -1);
-
-  return authors[randomIndex];
-};
-
-
-const generateFilmCard = () => ({
-  comments: generateComment(),
-  title: generateTitle(),
-  totalRating: getRandomPositiveFloat(0, 10),
-  poster: generatePoster(),
-  ageRating: 18,
-  director: 'Tom Ford',
-  writers: [generateName()],
-  actors: [generateName()],
-  releaseDate: '2019-05-11T00:00:00.000Z',
-  releaseCountry: 'Finland',
-  runtime: 77,
-  genre: ['Comedy', 'Drama'],
-  description: `Sentenced for a murder he did not commit, John Brant escapes from prison determined to find the re
-                Sentenced for a murder he did not commit, John Brant escapes from prison determined to find the re
-                Sentenced for a murder he did not commit, John Brant escapes from prison determined to find the re`,
-  watchlist: true,
-  alreadyWatched: true,
-  watchingDate: '2019-04-12T16:12:32.554Z',
-  favorite: true,
+export const generateComments = (val, id) => ({
+  commentId: id,
+  author: 'Ilya O\'Reilly',
+  comment: 'a film that changed my life, a true masterpiece, post-credit scene was just amazing omg.',
+  commentDate: '2019-05-11T16:12:32.554Z',
+  emotion: getRandomElementFromArray(EMOTIONS)
 });
 
-export {generateFilmCard, generateName};
-
+export const generateFilmCard = (val, id) => ({
+  id: id,
+  comments: [1, 3],
+  filmInfo: {
+    title: getRandomElementFromArray(TITLES),
+    alternativeTitle: 'Laziness Who Sold Themselves',
+    totalRating: getRandomRating(),
+    poster: `images/posters/${getRandomElementFromArray(POSTERS)}`,
+    ageRating: 0,
+    director: 'Tom Ford',
+    writers: [
+      'Takeshi Kitano',
+      'Kitano Kitano'
+    ],
+    actors: [
+      'Morgan Freeman',
+      'Freeman Freeman'
+    ],
+    release: {
+      date: '2019-05-11T00:00:00.000Z',
+      releaseCountry: 'Finland'
+    },
+    runtime: 77,
+    genre: getRandomArrayLength(GENRES),
+    description: getRandomElementFromArray(DESCRIPTIONS)
+  },
+  userDetails: {
+    watchlist: false,
+    alreadyWatched: true,
+    watchingDate: '2019-04-12T16:12:32.554Z',
+    favorite: true
+  }
+});
 
