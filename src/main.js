@@ -11,8 +11,8 @@ const header = body.querySelector('.header');
 const main = body.querySelector('.main');
 const footer = body.querySelector('.footer');
 const footerStatistics = footer.querySelector('.footer__statistics');
-const filmsContainerPresenter = new FilmsContainerPresenter();
 const filmCardModel = new FilmCardModel();
+const filmsContainerPresenter = new FilmsContainerPresenter(main, filmCardModel);
 
 render(new ProfileRatingView(), header);
 render(new NavigationView(), main);
@@ -20,4 +20,4 @@ render(new SortingView(), main);
 render(new MovieAmountView(), footerStatistics);
 
 
-filmsContainerPresenter.init(main, filmCardModel);
+filmsContainerPresenter.init();
