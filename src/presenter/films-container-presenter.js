@@ -62,8 +62,7 @@ export default class FilmsContainerPresenter {
     }
   };
 
-  #handleButtonShowMoreClick = (evt) => {
-    evt.preventDefault();
+  #handleButtonShowMoreClick = () => {
     this.#filmsList
       .slice(this.#renderedFilmsCount, this.#renderedFilmsCount + FILMS_COUNT_PER_STEP)
       .forEach((filmCard) => this.#renderFilmCard(filmCard));
@@ -107,7 +106,7 @@ export default class FilmsContainerPresenter {
 
     popupFilmDetailsComponent.setClosePopupFilmDetailsHandler(() => {
       removePopupFilmCard();
-      onEscKeydown();
+      document.removeEventListener('keydown', onEscKeydown);
     });
   };
 }

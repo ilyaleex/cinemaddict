@@ -164,7 +164,7 @@ export default class PopupFilmDetailsView extends AbstractView {
   }
 
   setClosePopupFilmDetailsHandler = (callback) => {
-    this._callback = callback;
+    this._callback.click = callback;
     this.element
       .querySelector('.film-details__close-btn')
       .addEventListener('click', this.#closePopupFilmDetailsHandler);
