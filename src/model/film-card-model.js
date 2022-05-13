@@ -1,6 +1,6 @@
 import {generateFilmCard, generateComments} from '../mock/film-card.js';
 
-const FILMS_AMOUNT = 0;
+const FILMS_AMOUNT = 22;
 const COMMENTS_AMOUNT = 3;
 
 export default class FilmCardModel {

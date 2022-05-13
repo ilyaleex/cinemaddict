@@ -1,4 +1,4 @@
-import {render} from './render.js';
+import {render} from './framework/render.js';
 import ProfileRatingView from './view/profile-rating-view.js';
 import NavigationView from './view/navigation-view.js';
 import MovieAmountView from './view/movie-amount-view.js';
