@@ -7,7 +7,7 @@ import FilmsListTopRatedView from '../view/films-list-top-rated-view.js';
 import FilmsListMostCommentedView from '../view/films-list-most-commented-view.js';
 import NoMoviesView from '../view/no-movies-view.js';
 import FilmCardPresenter from './film-card-presenter.js';
-import FilmCardModel from './model/film-card-model.js';
+import FilmCardModel from '../model/film-card-model.js';
 
 const FILMS_COUNT_PER_STEP = 5;
 

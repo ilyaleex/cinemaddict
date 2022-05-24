@@ -1,6 +1,6 @@
 import FilmCardView from '../view/film-card-view.js';
 import PopupFilmDetailsView from '../view/popup-film-details-view.js';
-import {render, RenderPosition} from '../framework/render.js';
+import {render, replace, remove, RenderPosition} from '../framework/render.js';
 
 const footer = document.querySelector('.footer');
 const body = document.querySelector('body');
@@ -10,7 +10,6 @@ export default class FilmCardPresenter {
   #filmCardComponent = null;
   #popupFilmDetailsComponent = null;
   #filmsModel = null;
-
   #filmCard = null;
 
   #comments = [];
@@ -21,6 +20,9 @@ export default class FilmCardPresenter {
   }
 
   init = (filmCard) => {
+    const prevFilmCardComponent = this.#filmCardComponent;
+    const prevPopupFilmDetailsComponent = this.#popupFilmDetailsComponent;
+
     this.#filmCard = filmCard;
 
     this.#comments = [...this.#filmsModel.filmComments];
@@ -30,7 +32,25 @@ export default class FilmCardPresenter {
     this.#filmCardComponent.setOpenPopupHandler(this.#openPopupHandler);
     this.#popupFilmDetailsComponent.setClosePopupFilmDetailsHandler(this.#closePopupHandler);
 
-    render(this.#filmCardComponent, this.#filmsListContainerComponent.element);
+    if (prevFilmCardComponent === null || prevPopupFilmDetailsComponent === null) {
+      render(this.#filmCardComponent, this.#filmsListContainerComponent);
+    }
+
+    if (this.#filmsListContainerComponent.contains(prevFilmCardComponent.element)) {
+      replace(this.#filmCardComponent, prevFilmCardComponent);
+    }
+
+    if (this.#filmsListContainerComponent.contains(prevPopupFilmDetailsComponent.element)) {
+      replace(this.#popupFilmDetailsComponent, prevPopupFilmDetailsComponent);
+    }
+
+    remove(prevFilmCardComponent);
+    remove(prevPopupFilmDetailsComponent);
+  };
+
+  destroy = () => {
+    remove(this.#filmCardComponent);
+    remove(this.#popupFilmDetailsComponent);
   };
 
   #addPopupFilmCard = () => {
