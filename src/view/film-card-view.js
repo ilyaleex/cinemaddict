@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {humanizeRuntime, normalizeFilmDate} from '../utils.js';
+import {humanizeRuntime, normalizeFilmDate, isActiveButton} from '../utils/film-card.js';
 
 const createFilmCardTemplate = (filmCard) => {
   const {
@@ -12,11 +12,11 @@ const createFilmCardTemplate = (filmCard) => {
       description,
       release,
     },
-    // userDetails: {
-    //   watchList,
-    //   alreadyWatched,
-    //   favorite,
-    // },
+    userDetails: {
+      watchList,
+      alreadyWatched,
+      favorite,
+    },
     comments
   } = filmCard;
 
@@ -37,9 +37,9 @@ const createFilmCardTemplate = (filmCard) => {
         <span class="film-card__comments">${comments.length} comments</span>
       </a>
       <div class="film-card__controls">
-        <button class="film-card__controls-item film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
-        <button class="film-card__controls-item film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
-        <button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>
+        <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${isActiveButton(watchList)}" type="button">Add to watchlist</button>
+        <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${isActiveButton(alreadyWatched)}" type="button">Mark as watched</button>
+        <button class="film-card__controls-item film-card__controls-item--favorite ${isActiveButton(favorite)}" type="button">Mark as favorite</button>
       </div>
     </article>`
   );

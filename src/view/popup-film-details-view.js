@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {humanizeRuntime, normalizeFilmDate} from '../utils.js';
+import {humanizeRuntime, isActiveButtonPopup, normalizeFilmDate} from '../utils/film-card.js';
 
 const createPopupFilmDetailsTemplate = (filmCard, allComments) => {
   const {
@@ -17,11 +17,11 @@ const createPopupFilmDetailsTemplate = (filmCard, allComments) => {
       actors,
       ageRating,
     },
-    // userDetails: {
-    //   watchList,
-    //   alreadyWatched,
-    //   favorite,
-    // },
+    userDetails: {
+      watchList,
+      alreadyWatched,
+      favorite,
+    },
     comments
   } = filmCard;
 
@@ -42,7 +42,6 @@ const createPopupFilmDetailsTemplate = (filmCard, allComments) => {
       </div>
     </li>`
   );
-
 
   const createGenre = (genreItem) => (
     `<span class="film-details__genre">${genreItem}</span>`
@@ -107,9 +106,9 @@ const createPopupFilmDetailsTemplate = (filmCard, allComments) => {
             </div>
           </div>
           <section class="film-details__controls">
-            <button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-            <button type="button" class="film-details__control-button film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-            <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+            <button type="button" class="film-details__control-button film-details__control-button--watchlist ${isActiveButtonPopup(watchList)}" id="watchlist" name="watchlist">Add to watchlist</button>
+            <button type="button" class="film-details__control-button film-details__control-button--watched ${isActiveButtonPopup(alreadyWatched)}" id="watched" name="watched">Already watched</button>
+            <button type="button" class="film-details__control-button film-details__control-button--favorite ${isActiveButtonPopup(favorite)}" id="favorite" name="favorite">Add to favorites</button>
           </section>
         </div>
         <div class="film-details__bottom-container">

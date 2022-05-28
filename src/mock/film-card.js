@@ -1,4 +1,4 @@
-import {getRandomInteger, getRandomFloatInteger} from '../utils.js';
+import {getRandomInteger, getRandomFloatInteger} from '../utils/common.js';
 import {nanoid} from 'nanoid';
 
 const POINTS_SCALE = 10;
@@ -88,7 +88,7 @@ export const generateFilmCard = () => ({
     description: getRandomElementFromArray(DESCRIPTIONS)
   },
   userDetails: {
-    watchlist: false,
+    watchlist: true,
     alreadyWatched: true,
     watchingDate: '2019-04-12T16:12:32.554Z',
     favorite: true
