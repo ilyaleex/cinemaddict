@@ -1,51 +1,33 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {humanizeRuntime, isActiveButtonPopup, normalizeFilmDate} from '../utils/film-card.js';
+import {humanizeRuntime} from '../utils/film-card.js';
+import CommentsModel from '../model/comments-model.js';
+import dayjs from 'dayjs';
 
-const createPopupFilmDetailsTemplate = (filmCard, allComments) => {
+const comments = new CommentsModel().filmComments;
+
+const createPopupFilmDetailsTemplate = (filmCard) => {
   const {
-    filmInfo : {
-      title,
-      alternativeTitle,
-      totalRating,
-      poster,
-      runtime,
-      genre,
-      description,
-      release,
-      director,
-      writers,
-      actors,
-      ageRating,
-    },
-    userDetails: {
-      watchList,
-      alreadyWatched,
-      favorite,
-    },
-    comments
-  } = filmCard;
+    ageRating,
+    poster,
+    title,
+    alternativeTitle,
+    totalRating,
+    director,
+    writers,
+    actors,
+    genre,
+    runtime,
+    release,
+    description
+  } = filmCard.filmInfo;
+  const {watchlist, alreadyWatched, favorite} = filmCard.userDetails;
 
-  const filmComments = allComments.filter(({commentId}) => comments.some((filmId) => commentId === filmId));
+  const watchlistClassName = watchlist ? 'film-details__control-button--active' : '';
+  const alreadyWatchedClassName = alreadyWatched ? 'film-details__control-button--active' : '';
+  const favoriteClassName = favorite ? 'film-details__control-button--active' : '';
 
-  const createComments = ({author, comment, commentDate, emotion}) => (
-    `<li class="film-details__comment">
-      <span class="film-details__comment-emoji">
-        <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
-      </span>
-      <div>
-        <p class="film-details__comment-text">${comment}</p>
-        <p class="film-details__comment-info">
-          <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${normalizeFilmDate(commentDate, 'comment-date')}</span>
-          <button class="film-details__comment-delete">Delete</button>
-        </p>
-      </div>
-    </li>`
-  );
-
-  const createGenre = (genreItem) => (
-    `<span class="film-details__genre">${genreItem}</span>`
-  );
+  const commentsId = filmCard.comments;
+  const filmComments = comments.filter((comment) => commentsId.includes(comment.id));
 
   return (
     `<section class="film-details">
@@ -56,7 +38,7 @@ const createPopupFilmDetailsTemplate = (filmCard, allComments) => {
           </div>
           <div class="film-details__info-wrap">
             <div class="film-details__poster">
-              <img class="film-details__poster-img" src="${poster}" alt="">
+              <img class="film-details__poster-img" src="${poster}" alt="${title}">
               <p class="film-details__age">${ageRating}+</p>
             </div>
             <div class="film-details__info">
@@ -71,8 +53,8 @@ const createPopupFilmDetailsTemplate = (filmCard, allComments) => {
               </div>
               <table class="film-details__table">
                 <tr class="film-details__row">
-                  <td class="film-details__term">${director}</td>
-                  <td class="film-details__cell">Anthony Mann</td>
+                  <td class="film-details__term">Director</td>
+                  <td class="film-details__cell">${director}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Writers</td>
@@ -84,7 +66,7 @@ const createPopupFilmDetailsTemplate = (filmCard, allComments) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${normalizeFilmDate(release.date, 'release-date')}</td>
+                  <td class="film-details__cell">${dayjs(release.date).format('DD MMMM YYYY')}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
@@ -92,12 +74,13 @@ const createPopupFilmDetailsTemplate = (filmCard, allComments) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
-                  <td class="film-details__cell">USA</td>
+                  <td class="film-details__cell">${release.releaseCountry}</td>
                 </tr>
                 <tr class="film-details__row">
-                  <td class="film-details__term">Genres</td>
+                  <td class="film-details__term">${genre.length > 1 ? 'Genres' : 'Genre'}</td>
                   <td class="film-details__cell">
-                    ${genre.map(createGenre).join('')}
+                    ${genre.map((it) => `<span class="film-details__genre">${it}</span>`).join('')}
+                  </td>
                 </tr>
               </table>
               <p class="film-details__film-description">
@@ -106,16 +89,28 @@ const createPopupFilmDetailsTemplate = (filmCard, allComments) => {
             </div>
           </div>
           <section class="film-details__controls">
-            <button type="button" class="film-details__control-button film-details__control-button--watchlist ${isActiveButtonPopup(watchList)}" id="watchlist" name="watchlist">Add to watchlist</button>
-            <button type="button" class="film-details__control-button film-details__control-button--watched ${isActiveButtonPopup(alreadyWatched)}" id="watched" name="watched">Already watched</button>
-            <button type="button" class="film-details__control-button film-details__control-button--favorite ${isActiveButtonPopup(favorite)}" id="favorite" name="favorite">Add to favorites</button>
+            <button type="button" class="film-details__control-button film-details__control-button--watchlist ${watchlistClassName}" id="watchlist" name="watchlist">Add to watchlist</button>
+            <button type="button" class="film-details__control-button film-details__control-button--watched ${alreadyWatchedClassName}" id="watched" name="watched">Already watched</button>
+            <button type="button" class="film-details__control-button film-details__control-button--favorite ${favoriteClassName}" id="favorite" name="favorite">Add to favorites</button>
           </section>
         </div>
         <div class="film-details__bottom-container">
           <section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${filmComments.length}</span></h3>
             <ul class="film-details__comments-list">
-              ${filmComments.map(createComments).join('')}
+              ${filmComments.length === 0 ? '' : filmComments.map((filmComment) => `<li class="film-details__comment">
+                  <span class="film-details__comment-emoji">
+                    <img src="./images/emoji/${filmComment.emotion}.png" width="55" height="55" alt="emoji-${filmComment.emotion}">
+                  </span>
+                  <div>
+                    <p class="film-details__comment-text">${filmComment.comment}</p>
+                    <p class="film-details__comment-info">
+                      <span class="film-details__comment-author">${filmComment.author}</span>
+                      <span class="film-details__comment-day">${dayjs(filmComment.date).format('YYYY/MM/DD HH:mm')}</span>
+                      <button class="film-details__comment-delete">Delete</button>
+                    </p>
+                  </div>
+                </li>`).join('')}
             </ul>
             <div class="film-details__new-comment">
               <div class="film-details__add-emoji-label"></div>
@@ -149,29 +144,58 @@ const createPopupFilmDetailsTemplate = (filmCard, allComments) => {
 };
 
 export default class PopupFilmDetailsView extends AbstractView {
-  #filmCard = null;
-  #filmComments = null;
+  #filmCard= null;
 
-  constructor(filmCard, filmComments) {
+  constructor (filmCard) {
     super();
     this.#filmCard = filmCard;
-    this.#filmComments = filmComments;
   }
 
   get template() {
-    return createPopupFilmDetailsTemplate(this.#filmCard, this.#filmComments);
+    return createPopupFilmDetailsTemplate(this.#filmCard);
   }
 
-  setClosePopupFilmDetailsHandler = (callback) => {
+  setClosePopupButtonHandler = (callback) => {
     this._callback.click = callback;
-    this.element
-      .querySelector('.film-details__close-btn')
-      .addEventListener('click', this.#closePopupFilmDetailsHandler);
+    this.element.querySelector('.film-details__close-btn')
+      .addEventListener('click', this.#closePopupButtonHandler);
   };
 
-  #closePopupFilmDetailsHandler = (evt) => {
+  setWatchlistClickHandler = (callback) => {
+    this._callback.watchlistClick = callback;
+    this.element.querySelector('.film-details__control-button--watchlist')
+      .addEventListener('click', this.#watchlistClickHandler);
+  };
+
+  setHistoryClickHandler = (callback) => {
+    this._callback.historyClick = callback;
+    this.element.querySelector('.film-details__control-button--watched')
+      .addEventListener('click', this.#historyClickHandler);
+  };
+
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favoriteClick = callback;
+    this.element.querySelector('.film-details__control-button--favorite')
+      .addEventListener('click', this.#favoriteClickHandler);
+  };
+
+  #watchlistClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.watchlistClick();
+  };
+
+  #historyClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.historyClick();
+  };
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  };
+
+  #closePopupButtonHandler = (evt) => {
     evt.preventDefault();
     this._callback.click();
   };
 }
-
