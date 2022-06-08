@@ -1,9 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {humanizeRuntime} from '../utils/film-card.js';
-import CommentsModel from '../model/comments-model.js';
 import dayjs from 'dayjs';
-
-const comments = new CommentsModel().filmComments;
+import FilmCommentsModel from '../model/comments-model.js';
 
 const createPopupFilmDetailsTemplate = (filmCard) => {
   const {
@@ -27,7 +25,7 @@ const createPopupFilmDetailsTemplate = (filmCard) => {
   const favoriteClassName = favorite ? 'film-details__control-button--active' : '';
 
   const commentsId = filmCard.comments;
-  const filmComments = comments.filter((comment) => commentsId.includes(comment.id));
+  const filmComments =  new FilmCommentsModel().filmComments.filter((comment) => commentsId.includes(comment.id));
 
   return (
     `<section class="film-details">

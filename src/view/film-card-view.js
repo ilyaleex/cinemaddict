@@ -7,7 +7,7 @@ const createFilmCardTemplate = (filmCard) => {
   const comments = filmCard.comments;
   const {watchlist, alreadyWatched, favorite} = filmCard.userDetails;
 
-  const descriprionPreview = getDescriptionPreview(description);
+  const descriptionPreview = getDescriptionPreview(description);
   const watchlistClassName = watchlist ? 'film-card__controls-item--active' : '';
   const alreadyWatchedClassName = alreadyWatched ? 'film-card__controls-item--active' : '';
   const favoriteClassName = favorite ? 'film-card__controls-item--active' : '';
@@ -23,7 +23,7 @@ const createFilmCardTemplate = (filmCard) => {
           <span class="film-card__genre">${genre[0]}</span>
         </p>
         <img src="${poster}" alt="${title}" class="film-card__poster">
-        <p class="film-card__description">${descriprionPreview}</p>
+        <p class="film-card__description">${descriptionPreview}</p>
         <span class="film-card__comments">${comments.length} comments</span>
       </a>
       <div class="film-card__controls">
