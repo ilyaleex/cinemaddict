@@ -1,5 +1,5 @@
 import PopupFilmDetailsView from '../view/popup-film-details-view.js';
-import {render, remove} from '../framework/render.js';
+import {render, remove, replace} from '../framework/render.js';
 import {PopupState} from '../utils/const.js';
 
 export default class PopupFilmDetailsPresenter {
@@ -15,6 +15,10 @@ export default class PopupFilmDetailsPresenter {
     this.#popupContainer = popupContainer;
     this.#changeData = changeData;
     this.#changeState = changeState;
+  }
+
+  get state() {
+    return this.#state;
   }
 
   init = (filmCard) => {
@@ -37,15 +41,8 @@ export default class PopupFilmDetailsPresenter {
       return;
     }
 
-    if (this.#state === PopupState.OPEN) {
-      prevPopupComponent.element.querySelector('.film-details__top-container')
-        .replaceChild(
-          this.#popupComponent.element.querySelector('.film-details__controls'),
-          prevPopupComponent.element.querySelector('.film-details__controls')
-        );
-
-      this.#popupComponent = prevPopupComponent;
-    }
+    replace(this.#popupComponent, prevPopupComponent);
+    this.#popupComponent.element.scrollTop = prevPopupComponent.scrollTopValue;
   };
 
   #escKeyDownHandler = (evt) => {
@@ -78,8 +75,4 @@ export default class PopupFilmDetailsPresenter {
       this.#state = PopupState.HIDDEN;
     }
   };
-
-  get state() {
-    return this.#state;
-  }
 }

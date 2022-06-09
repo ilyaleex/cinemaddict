@@ -118,12 +118,10 @@ export default class FilmsContainerPresenter {
     }
   };
 
-  #clearFilmsList = (isFilter = false) => {
+  #clearFilmsList = () => {
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
     this.#filmPresenter.clear();
-    if (isFilter) {
-      this.#renderedFilmsCount = FILMS_COUNT_PER_STEP;
-    }
+    this.#renderedFilmsCount = FILMS_COUNT_PER_STEP;
     remove(this.#buttonShowMoreComponent);
   };
 

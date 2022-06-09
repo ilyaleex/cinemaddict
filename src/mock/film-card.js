@@ -95,3 +95,6 @@ export const generateFilmCard = () => ({
   }
 });
 
+export {EMOTIONS};
+
+
