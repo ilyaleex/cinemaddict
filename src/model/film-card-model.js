@@ -1,17 +1,13 @@
-import {generateFilmCard, generateComments} from '../mock/film-card.js';
-
-const FILMS_AMOUNT = 22;
-const COMMENTS_AMOUNT = 3;
+import {generateFilmCard} from '../mock/film-card.js';
 
 export default class FilmCardModel {
-  #filmCards = Array.from({length: FILMS_AMOUNT}, generateFilmCard);
-  #filmComments = Array.from({length: COMMENTS_AMOUNT}, generateComments);
+  #filmCards = Array.from({length: 13}, generateFilmCard).map((filmCard, id) => {
+    filmCard.id = ++id;
+    return filmCard;
+  });
 
   get filmCards() {
     return this.#filmCards;
   }
-
-  get filmComments() {
-    return this.#filmComments;
-  }
 }
+

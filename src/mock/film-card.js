@@ -1,4 +1,5 @@
-import {getRandomInteger, getRandomFloatInteger} from '../utils.js';
+import {getRandomInteger, getRandomFloatInteger} from '../utils/common.js';
+import {nanoid} from 'nanoid';
 
 const POINTS_SCALE = 10;
 
@@ -52,16 +53,16 @@ const getRandomElementFromArray = (list) => {
 
 const getRandomArrayLength = (list) => list.slice(0, getRandomInteger(1, list.length - 1));
 
-export const generateComments = (val, id) => ({
-  commentId: id,
+export const generateComments = () => ({
+  commentId: nanoid(),
   author: 'Ilya O\'Reilly',
   comment: 'a film that changed my life, a true masterpiece, post-credit scene was just amazing omg.',
   commentDate: '2019-05-11T16:12:32.554Z',
   emotion: getRandomElementFromArray(EMOTIONS)
 });
 
-export const generateFilmCard = (val, id) => ({
-  id: id,
+export const generateFilmCard = () => ({
+  id: nanoid(),
   comments: [1, 3],
   filmInfo: {
     title: getRandomElementFromArray(TITLES),
@@ -87,10 +88,13 @@ export const generateFilmCard = (val, id) => ({
     description: getRandomElementFromArray(DESCRIPTIONS)
   },
   userDetails: {
-    watchlist: false,
+    watchlist: true,
     alreadyWatched: true,
     watchingDate: '2019-04-12T16:12:32.554Z',
     favorite: true
   }
 });
+
+export {EMOTIONS};
+
 
