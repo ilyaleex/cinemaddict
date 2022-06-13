@@ -1,5 +1,6 @@
 import FilmCardView from '../view/film-card-view.js';
 import {render, replace, remove,} from '../framework/render.js';
+import {UpdateType, UserAction} from '../utils/const.js';
 
 export default class FilmCardPresenter {
   #filmListContainer = null;
@@ -8,7 +9,7 @@ export default class FilmCardPresenter {
   #filmCard = null;
   #popupCallback = null;
 
-  constructor (filmListContainer, changeData, popupCallback) {
+  constructor(filmListContainer, changeData, popupCallback) {
     this.#filmListContainer = filmListContainer;
     this.#changeData = changeData;
     this.#popupCallback = popupCallback;
@@ -20,9 +21,9 @@ export default class FilmCardPresenter {
 
     this.#filmCardComponent = new FilmCardView(this.#filmCard);
     this.#filmCardComponent.setClickHandler(this.#popupCallback);
-    this.#filmCardComponent.setWatchlistClickHandler(this.#onWatchlistClick);
-    this.#filmCardComponent.setHistoryClickHandler(this.#onHistoryClick);
-    this.#filmCardComponent.setFavoriteClickHandler(this.#onFavoriteClick);
+    this.#filmCardComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
+    this.#filmCardComponent.setHistoryClickHandler(this.#handleHistoryClick);
+    this.#filmCardComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
 
     if (prevFilmCardComponent === null) {
       render(this.#filmCardComponent, this.#filmListContainer);
@@ -36,19 +37,31 @@ export default class FilmCardPresenter {
     remove(prevFilmCardComponent);
   };
 
-  #onWatchlistClick = () => {
+  #handleWatchlistClick = () => {
     this.#filmCard.userDetails.watchlist = !this.#filmCard.userDetails.watchlist;
-    this.#changeData(this.#filmCard);
+    this.#changeData(
+      UserAction.UPDATE_FILM_CARD,
+      UpdateType.MINOR,
+      this.#filmCard
+    );
   };
 
-  #onHistoryClick = () => {
+  #handleHistoryClick = () => {
     this.#filmCard.userDetails.alreadyWatched = !this.#filmCard.userDetails.alreadyWatched;
-    this.#changeData(this.#filmCard);
+    this.#changeData(
+      UserAction.UPDATE_FILM_CARD,
+      UpdateType.MINOR,
+      this.#filmCard
+    );
   };
 
-  #onFavoriteClick = () => {
+  #handleFavoriteClick = () => {
     this.#filmCard.userDetails.favorite = !this.#filmCard.userDetails.favorite;
-    this.#changeData(this.#filmCard);
+    this.#changeData(
+      UserAction.UPDATE_FILM_CARD,
+      UpdateType.MINOR,
+      this.#filmCard
+    );
   };
 
   destroy = () => {

@@ -1,24 +1,28 @@
-import {render} from './framework/render.js';
-import FilterView from './view/filter-view.js';
-import FilmsAmountView from './view/films-amount-view.js';
 import FilmsContainerPresenter from './presenter/films-container-presenter.js';
 import FilmCardModel from './model/film-card-model.js';
-import ProfileRatingPresenter from './presenter/profile-rating-presenter.js';
-import {getRandomProfileRating} from './mock/profile-rating.js';
+import FilmCommentsModel from './model/comments-model.js';
+import FilterPresenter from './presenter/filter-presenter.js';
+import FilterModel from './model/filter-model.js';
 
-const profileRating = getRandomProfileRating();
-
-const body = document.querySelector('body');
-const header = body.querySelector('.header');
-const main = body.querySelector('.main');
-const footer = body.querySelector('.footer');
-const footerStatistics = footer.querySelector('.footer__statistics');
-const profileRatingPresenter = new ProfileRatingPresenter();
+const main = document.querySelector('.main');
 const filmCardModel = new FilmCardModel();
-const filmsContainerPresenter = new FilmsContainerPresenter(main, filmCardModel);
+const filterModel = new FilterModel();
+const filmCommentsModel = new FilmCommentsModel();
+const filmsContainerPresenter = new FilmsContainerPresenter(main, filmCardModel, filterModel, filmCommentsModel);
+const filterPresenter = new FilterPresenter(main, filterModel, filmCardModel);
 
-render(new FilterView(filmCardModel.filmCards), main);
-render(new FilmsAmountView(), footerStatistics);
+filterPresenter.init();
 
-profileRatingPresenter.init(header, profileRating);
 filmsContainerPresenter.init();
+// const filmsModel = new FilmsModel();
+// const filterModel = new FilterModel();
+// const commentsModel = new CommentsModel();
+// // const profilePresenter = new ProfilePresenter();
+// const boardPresenter = new BoardPresenter(siteMainElement, filmsModel, filterModel, commentsModel);
+//
+// const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
+//
+// filterPresenter.init();
+//
+// // profilePresenter.init(siteHeaderElement, getRandomProfileRating());
+// boardPresenter.init();

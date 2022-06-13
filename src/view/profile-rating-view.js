@@ -1,22 +1,23 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import {getProfileRating} from '../utils/profile.js';
 
-const createProfileRatingTemplate = (rating) => (
+const createProfileRatingTemplate = (films) => (
   `<section class="header__profile profile">
-    <p class="profile__rating ${rating ? '' : 'visually-hidden'}">${rating}</p>
+    <p class="profile__rating ${getProfileRating(films) ? '' : 'visually-hidden'}">${getProfileRating(films)}</p>
     <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
   </section>`
 );
 
 export default class ProfileRatingView extends AbstractView {
-  #rating;
+  #films;
 
-  constructor(rating) {
+  constructor(films) {
     super();
-    this.#rating = rating;
+    this.#films = films;
   }
 
   get template() {
-    return createProfileRatingTemplate(this.#rating);
+    return createProfileRatingTemplate(this.#films);
   }
 }
 
