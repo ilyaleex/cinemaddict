@@ -7,7 +7,10 @@ const getRandomInteger = (a = 0, b = 1) => {
 
 const getRandomFloatInteger = (a = 0, b = 1, float = 1) => (Math.random() * (b - a) + a).toFixed(float);
 
+const sortFilmsByCommentsAmount = (filmA, filmB) => (filmB.comments.length - filmA.comments.length);
+
 export {
   getRandomInteger,
-  getRandomFloatInteger
+  getRandomFloatInteger,
+  sortFilmsByCommentsAmount
 };

@@ -1,10 +1,10 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {humanizeRuntime} from '../utils/film-card.js';
 import dayjs from 'dayjs';
-import FilmCommentsModel from '../model/comments-model.js';
 import {EMOTIONS} from '../mock/film-card.js';
+import he from 'he';
 
-const createPopupFilmDetailsTemplate = (filmCard) => {
+const createPopupFilmDetailsTemplate = (filmCard, comments) => {
   const {
     ageRating,
     poster,
@@ -25,8 +25,7 @@ const createPopupFilmDetailsTemplate = (filmCard) => {
   const alreadyWatchedClassName = alreadyWatched ? 'film-details__control-button--active' : '';
   const favoriteClassName = favorite ? 'film-details__control-button--active' : '';
 
-  const commentsId = filmCard.comments;
-  const filmComments =  new FilmCommentsModel().filmComments.filter((comment) => commentsId.includes(comment.id));
+  const filmComments = comments.filter((comment) => filmCard.comments.includes(comment.id));
 
   return (
     `<section class="film-details">
@@ -102,7 +101,7 @@ const createPopupFilmDetailsTemplate = (filmCard) => {
                     <img src="./images/emoji/${filmComment.emotion}.png" width="55" height="55" alt="emoji-${filmComment.emotion}">
                   </span>
                   <div>
-                    <p class="film-details__comment-text">${filmComment.comment}</p>
+                    <p class="film-details__comment-text">${he.encode(filmComment.comment)}</p>
                     <p class="film-details__comment-info">
                       <span class="film-details__comment-author">${filmComment.author}</span>
                       <span class="film-details__comment-day">${dayjs(filmComment.date).format('YYYY/MM/DD HH:mm')}</span>
@@ -134,22 +133,23 @@ const createPopupFilmDetailsTemplate = (filmCard) => {
 
 export default class PopupFilmDetailsView extends AbstractView {
   #filmCard= null;
+  #comments = null;
   #scrollTopValue = 0;
 
-  constructor (filmCard) {
+  constructor(filmCard, comments) {
     super();
     this.#filmCard = filmCard;
+    this.#comments = comments;
     this.#setInnerHandlers();
   }
 
   get template() {
-    return createPopupFilmDetailsTemplate(this.#filmCard);
+    return createPopupFilmDetailsTemplate(this.#filmCard, this.#comments);
   }
 
   get scrollTopValue() {
     return this.#scrollTopValue;
   }
-
 
   setClosePopupButtonHandler = (callback) => {
     this._callback.click = callback;
@@ -175,6 +175,12 @@ export default class PopupFilmDetailsView extends AbstractView {
       .addEventListener('click', this.#favoriteClickHandler);
   };
 
+  setDeleteCommentButtonHandler = (callback) => {
+    this._callback.deleteComment = callback;
+    this.element.querySelector('.film-details__comments-list')
+      .addEventListener('click', this.#deleteCommentButtonHandler);
+  };
+
   #watchlistClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.watchlistClick();
@@ -193,6 +199,14 @@ export default class PopupFilmDetailsView extends AbstractView {
   #closePopupButtonHandler = (evt) => {
     evt.preventDefault();
     this._callback.click();
+  };
+
+  #deleteCommentButtonHandler = (evt) => {
+    if (evt.target.tagName !== 'BUTTON') {
+      return;
+    }
+    evt.preventDefault();
+    this._callback.deleteComment(evt.target);
   };
 
   #emojiChangeHandler = (evt) => {
