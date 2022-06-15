@@ -2,6 +2,9 @@ import AbstractView from '../framework/view/abstract-view.js';
 import {humanizeRuntime, getDescriptionPreview} from '../utils/film-card.js';
 import dayjs from 'dayjs';
 
+const SHAKE_CLASS_NAME = 'shake';
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 const createFilmCardTemplate = (filmCard) => {
   const {poster, title, totalRating, genre, runtime, release, description} = filmCard.filmInfo;
   const comments = filmCard.comments;
@@ -46,6 +49,14 @@ export default class FilmCardView extends AbstractView {
   get template() {
     return createFilmCardTemplate(this.#filmCard);
   }
+
+  shakeElement = (element, callback) => {
+    element.classList.add(SHAKE_CLASS_NAME);
+    setTimeout(() => {
+      element.classList.remove(SHAKE_CLASS_NAME);
+      callback?.();
+    }, SHAKE_ANIMATION_TIMEOUT);
+  };
 
   setClickHandler = (callback) => {
     this._callback.click = callback;

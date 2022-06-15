@@ -1,10 +1,11 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {humanizeRuntime} from '../utils/film-card.js';
 import dayjs from 'dayjs';
-import {EMOTIONS} from '../mock/film-card.js';
-import he from 'he';
 
-const createPopupFilmDetailsTemplate = (filmCard, comments) => {
+const SHAKE_CLASS_NAME = 'shake';
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
+const createPopupFilmDetailsTemplate = (filmCard) => {
   const {
     ageRating,
     poster,
@@ -24,8 +25,6 @@ const createPopupFilmDetailsTemplate = (filmCard, comments) => {
   const watchlistClassName = watchlist ? 'film-details__control-button--active' : '';
   const alreadyWatchedClassName = alreadyWatched ? 'film-details__control-button--active' : '';
   const favoriteClassName = favorite ? 'film-details__control-button--active' : '';
-
-  const filmComments = comments.filter((comment) => filmCard.comments.includes(comment.id));
 
   return (
     `<section class="film-details">
@@ -93,38 +92,6 @@ const createPopupFilmDetailsTemplate = (filmCard, comments) => {
           </section>
         </div>
         <div class="film-details__bottom-container">
-          <section class="film-details__comments-wrap">
-            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${filmComments.length}</span></h3>
-            <ul class="film-details__comments-list">
-              ${filmComments.length === 0 ? '' : filmComments.map((filmComment) => `<li class="film-details__comment">
-                  <span class="film-details__comment-emoji">
-                    <img src="./images/emoji/${filmComment.emotion}.png" width="55" height="55" alt="emoji-${filmComment.emotion}">
-                  </span>
-                  <div>
-                    <p class="film-details__comment-text">${he.encode(filmComment.comment)}</p>
-                    <p class="film-details__comment-info">
-                      <span class="film-details__comment-author">${filmComment.author}</span>
-                      <span class="film-details__comment-day">${dayjs(filmComment.date).format('YYYY/MM/DD HH:mm')}</span>
-                      <button class="film-details__comment-delete">Delete</button>
-                    </p>
-                  </div>
-                </li>`).join('')}
-            </ul>
-            <div class="film-details__new-comment">
-              <div class="film-details__add-emoji-label">
-                <img class="visually-hidden" src="" width="55" height="55">
-              </div>
-              <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
-              </label>
-              <div class="film-details__emoji-list">
-                ${EMOTIONS.map((emoji) => `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}">
-                  <label class="film-details__emoji-label" for="emoji-${emoji}">
-                    <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji-${emoji}">
-                  </label>`).join('')}
-              </div>
-            </div>
-          </section>
         </div>
       </form>
     </section>`
@@ -133,23 +100,29 @@ const createPopupFilmDetailsTemplate = (filmCard, comments) => {
 
 export default class PopupFilmDetailsView extends AbstractView {
   #filmCard= null;
-  #comments = null;
   #scrollTopValue = 0;
 
-  constructor(filmCard, comments) {
+  constructor(filmCard) {
     super();
     this.#filmCard = filmCard;
-    this.#comments = comments;
     this.#setInnerHandlers();
   }
 
   get template() {
-    return createPopupFilmDetailsTemplate(this.#filmCard, this.#comments);
+    return createPopupFilmDetailsTemplate(this.#filmCard);
   }
 
   get scrollTopValue() {
     return this.#scrollTopValue;
   }
+
+  shakeElement = (element, callback) => {
+    element.classList.add(SHAKE_CLASS_NAME);
+    setTimeout(() => {
+      element.classList.remove(SHAKE_CLASS_NAME);
+      callback?.();
+    }, SHAKE_ANIMATION_TIMEOUT);
+  };
 
   setClosePopupButtonHandler = (callback) => {
     this._callback.click = callback;
@@ -175,12 +148,6 @@ export default class PopupFilmDetailsView extends AbstractView {
       .addEventListener('click', this.#favoriteClickHandler);
   };
 
-  setDeleteCommentButtonHandler = (callback) => {
-    this._callback.deleteComment = callback;
-    this.element.querySelector('.film-details__comments-list')
-      .addEventListener('click', this.#deleteCommentButtonHandler);
-  };
-
   #watchlistClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.watchlistClick();
@@ -201,31 +168,11 @@ export default class PopupFilmDetailsView extends AbstractView {
     this._callback.click();
   };
 
-  #deleteCommentButtonHandler = (evt) => {
-    if (evt.target.tagName !== 'BUTTON') {
-      return;
-    }
-    evt.preventDefault();
-    this._callback.deleteComment(evt.target);
-  };
-
-  #emojiChangeHandler = (evt) => {
-    if (evt.target.tagName !== 'LABEL' && evt.target.tagName !== 'IMG') {
-      return;
-    }
-
-    const commentEmoji = this.element.querySelector('.film-details__add-emoji-label img');
-    commentEmoji.src = evt.target.tagName === 'IMG' ? evt.target.src : evt.target.firstElementChild.src;
-    commentEmoji.alt = evt.target.tagName === 'IMG' ? evt.target.alt : evt.target.firstElementChild.alt;
-    commentEmoji.classList.remove('visually-hidden');
-  };
-
   #scrollPopupHandler = () => {
     this.#scrollTopValue = +this.element.scrollTop.toFixed();
   };
 
   #setInnerHandlers = () => {
-    this.element.querySelector('.film-details__emoji-list').addEventListener('click', this.#emojiChangeHandler);
     this.element.addEventListener('scroll', this.#scrollPopupHandler);
   };
 }

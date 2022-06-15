@@ -3,26 +3,20 @@ import FilmCardModel from './model/film-card-model.js';
 import FilmCommentsModel from './model/comments-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import FilterModel from './model/filter-model.js';
+import FilmsApiService from './api-services/films-api-service.js';
+import CommentsApiService from './api-services/comments-api-service.js';
+
+const AUTHORIZATION = 'Basic v857v99ndnwh43gf';
+const END_POINT = 'https://17.ecmascript.pages.academy/cinemaddict';
 
 const main = document.querySelector('.main');
-const filmCardModel = new FilmCardModel();
+const filmsModel = new FilmCardModel(new FilmsApiService(END_POINT, AUTHORIZATION));
+const filmCommentsModel = new FilmCommentsModel(new CommentsApiService(END_POINT, AUTHORIZATION));
+
 const filterModel = new FilterModel();
-const filmCommentsModel = new FilmCommentsModel();
-const filmsContainerPresenter = new FilmsContainerPresenter(main, filmCardModel, filterModel, filmCommentsModel);
-const filterPresenter = new FilterPresenter(main, filterModel, filmCardModel);
+const filmsContainerPresenter = new FilmsContainerPresenter(main, filmsModel, filterModel, filmCommentsModel);
+const filterPresenter = new FilterPresenter(main, filterModel, filmsModel);
 
 filterPresenter.init();
-
 filmsContainerPresenter.init();
-// const filmsModel = new FilmsModel();
-// const filterModel = new FilterModel();
-// const commentsModel = new CommentsModel();
-// // const profilePresenter = new ProfilePresenter();
-// const boardPresenter = new BoardPresenter(siteMainElement, filmsModel, filterModel, commentsModel);
-//
-// const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
-//
-// filterPresenter.init();
-//
-// // profilePresenter.init(siteHeaderElement, getRandomProfileRating());
-// boardPresenter.init();
+filmsModel.init();
