@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Илья Ли](https://up.htmlacademy.ru/ecmascript/17/user/1606793).
-* Наставник: [Дмитрий Гуляев](https://htmlacademy.ru/profile/dima).
+* Наставник: [Антон Попов](https://htmlacademy.ru/profile/joker).
 
 ---
 
