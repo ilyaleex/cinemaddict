@@ -1,5 +1,4 @@
 import ApiService from '../framework/api-service.js';
-// import {convertToSnakeCase} from '../utils/object-keys-converters.js';
 import {ApiMethod} from '../utils/const.js';
 
 export default class FilmsApiService extends ApiService {
@@ -22,14 +21,6 @@ export default class FilmsApiService extends ApiService {
   };
 
   #adaptToServer = (film) => {
-    // const adaptedFilm = {...film};
-    // convertToSnakeCase(adaptedFilm);
-    // convertToSnakeCase(adaptedFilm.film_info);
-    // convertToSnakeCase(adaptedFilm.film_info.release);
-    // convertToSnakeCase(adaptedFilm.user_details);
-    //
-    // return adaptedFilm;
-
     const adaptedFilm = {
       id: film.id,
       comments: film.comments,
