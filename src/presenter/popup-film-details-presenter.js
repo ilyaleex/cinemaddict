@@ -134,10 +134,7 @@ export default class PopupFilmDetailsPresenter {
           {
             film: this.#filmCard,
             comment: {
-              id: -1,
-              author: 'Author',
               comment: commentTextElement.value,
-              date: new Date(),
               emotion: commentEmojiElement.value,
             }
           }
