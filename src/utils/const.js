@@ -1,3 +1,5 @@
+const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
+
 const FilterType = {
   ALL: 'all',
   WATCHLIST: 'watchlist',
@@ -23,6 +25,7 @@ const UserAction = {
 };
 
 const UpdateType = {
+  INIT: 'INIT',
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR'
@@ -33,4 +36,11 @@ const ExtraFilmTitle = {
   MOST_COMMENTED: 'Most commented'
 };
 
-export {FilterType, SortingType, PopupState, UserAction, UpdateType, ExtraFilmTitle};
+const ApiMethod = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE'
+};
+
+export {EMOTIONS, FilterType, SortingType, PopupState, UserAction, UpdateType, ExtraFilmTitle, ApiMethod};

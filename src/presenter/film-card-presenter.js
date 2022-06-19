@@ -37,12 +37,24 @@ export default class FilmCardPresenter {
     remove(prevFilmCardComponent);
   };
 
+  destroy = () => {
+    remove(this.#filmCardComponent);
+  };
+
+  setAbortingChange = () => {
+    const elem = this.#filmCardComponent.element.querySelector('.film-card__controls');
+    this.#filmCardComponent.shakeElement(elem);
+  };
+
   #handleWatchlistClick = () => {
     this.#filmCard.userDetails.watchlist = !this.#filmCard.userDetails.watchlist;
     this.#changeData(
       UserAction.UPDATE_FILM_CARD,
       UpdateType.MINOR,
-      this.#filmCard
+      {
+        film: this.#filmCard,
+        presenter: this,
+      }
     );
   };
 
@@ -51,7 +63,10 @@ export default class FilmCardPresenter {
     this.#changeData(
       UserAction.UPDATE_FILM_CARD,
       UpdateType.MINOR,
-      this.#filmCard
+      {
+        film: this.#filmCard,
+        presenter: this,
+      }
     );
   };
 
@@ -60,12 +75,11 @@ export default class FilmCardPresenter {
     this.#changeData(
       UserAction.UPDATE_FILM_CARD,
       UpdateType.MINOR,
-      this.#filmCard
+      {
+        film: this.#filmCard,
+        presenter: this,
+      }
     );
-  };
-
-  destroy = () => {
-    remove(this.#filmCardComponent);
   };
 }
 

@@ -1,32 +1,46 @@
-import {generateComments} from '../mock/film-card.js';
 import Observable from '../framework/observable.js';
 
-const newComments = () => {
-  const comments = [];
-  for (let i = 1; i <= 10; i++) {
-    comments.push(generateComments(i));
-  }
-  return comments;
-};
-
 export default class FilmCommentsModel extends Observable {
-  #comments = newComments();
+  #commentsApiService = null;
+  #comments = [];
+
+  constructor(commentsApiService) {
+    super();
+    this.#commentsApiService = commentsApiService;
+  }
 
   get comments() {
     return this.#comments;
   }
 
-  addComment = (updateType, update) => {
-    const {film, comment} = update;
-    comment.id = this.#comments.length + 1;
-    this.#comments.push(comment);
-    film.comments.push(comment.id);
-
-    this._notify(updateType, film);
+  init = async (film) => {
+    try {
+      const comments = await this.#commentsApiService.getComments(film);
+      this.#comments = comments;
+    } catch(err) {
+      this.#comments = [];
+    }
   };
 
-  deleteComment = (updateType, update) => {
-    this._notify(updateType, update);
+  addComment = async (updateType, update) => {
+    const {film, comment} = update;
+    try {
+      const response = await this.#commentsApiService.addComment(film, comment);
+      this._notify(updateType, response);
+    } catch (err) {
+      throw new Error('Can\'t add comment');
+    }
+  };
+
+  deleteComment = async (updateType, update) => {
+    const {film, comments, index} = update;
+    try {
+      await this.#commentsApiService.deleteComment(comments[index]);
+      film.comments.splice(index, 1);
+      this._notify(updateType, film);
+    } catch(err) {
+      throw new Error('Can\'t delete comment');
+    }
   };
 }
 

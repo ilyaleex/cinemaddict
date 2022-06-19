@@ -2,7 +2,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 
 const createFilmsTotalTemplate = (films) => (
   `<section class="footer__statistics">
-    <p>${(films.length).toLocaleString('ru-RU')} movies inside</p>
+    <p>${(films.length)} movies inside</p>
   </section>`
 );
 
