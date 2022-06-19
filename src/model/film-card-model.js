@@ -1,6 +1,5 @@
 import Observable from '../framework/observable.js';
 import {UpdateType} from '../utils/const.js';
-// import {convertToCamelCase} from '../utils/object-keys-converters.js';
 
 export default class FilmCardModel extends Observable {
   #filmsApiService = null;
@@ -48,14 +47,6 @@ export default class FilmCardModel extends Observable {
   };
 
   #adaptToClient = (film) => {
-    // const adaptedFilmCard = {...filmCard};
-    //
-    // convertToCamelCase(adaptedFilmCard);
-    // convertToCamelCase(adaptedFilmCard.filmInfo);
-    // convertToCamelCase(adaptedFilmCard.filmInfo.release);
-    // convertToCamelCase(adaptedFilmCard.userDetails);
-    //
-    // return adaptedFilmCard;
     const adaptedFilm = {
       id: film.id,
       comments: film.comments,

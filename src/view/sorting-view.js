@@ -3,9 +3,9 @@ import {SortingType} from '../utils/const.js';
 
 const createSortingTemplate = (currentSortingType) => (
   `<ul class="sort">
-    <li><a href="#" data-sort-type="${currentSortingType === SortingType.DEFAULT ? 'sort__button--active' : ''}" class="sort__button">Sort by default</a></li>
-    <li><a href="#" data-sort-type="${currentSortingType === SortingType.DATE ? 'sort__button--active' : ''}" class="sort__button">Sort by date</a></li>
-    <li><a href="#" data-sort-type="${currentSortingType === SortingType.RATING ? 'sort__button--active' : ''}" class="sort__button">Sort by rating</a></li>
+    <li><a href="#" data-sort-type="${SortingType.DEFAULT}" class="sort__button ${currentSortingType === SortingType.DEFAULT ? 'sort__button--active' : ''}">Sort by default</a></li>
+    <li><a href="#" data-sort-type="${SortingType.DATE}" class="sort__button ${currentSortingType === SortingType.DATE ? 'sort__button--active' : ''}">Sort by date</a></li>
+    <li><a href="#" data-sort-type="${SortingType.RATING}" class="sort__button ${currentSortingType === SortingType.RATING ? 'sort__button--active' : ''}">Sort by rating</a></li>
   </ul>`
 );
 
@@ -32,6 +32,6 @@ export default class SortingView extends AbstractView {
     }
 
     evt.preventDefault();
-    this._callback.sortingTypeChange(evt.target.dataset.sortingType);
+    this._callback.sortingTypeChange(evt.target.dataset.sortType);
   };
 }
