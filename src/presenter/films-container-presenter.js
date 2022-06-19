@@ -147,7 +147,6 @@ export default class FilmsContainerPresenter {
         this.#updateFilmData(data);
         break;
       case UpdateType.MAJOR:
-        this.#renderProfile();
         this.#clearContainer({resetRenderedFilmsCount: true});
         this.#renderContainer();
         break;
